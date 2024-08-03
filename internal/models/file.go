@@ -8,3 +8,7 @@ type FileDTO struct {
 	Name string
 	Data bytes.Buffer
 }
+
+func (dto FileDTO) Validate() error {
+	panic("implement me")
+}

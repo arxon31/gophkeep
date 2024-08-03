@@ -5,3 +5,7 @@ type SaveFileS3URLDTO struct {
 	Meta string
 	URL  string
 }
+
+func (dto SaveFileS3URLDTO) Validate() error {
+	panic("implement me")
+}

@@ -8,7 +8,9 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
-const location = "us-east-1"
+const (
+	URLExpiration = time.Hour * 24 * 365
+)
 
 type repository struct {
 	client *minio.Client
@@ -18,7 +20,7 @@ func NewS3Repo(client *minio.Client) *repository {
 	return &repository{client: client}
 }
 
-func (r *repository) SaveFile(ctx context.Context, file models.FileDTO) (url string, err error) {
+func (r *repository) SaveFile(ctx context.Context, file *models.FileDTO) (url string, err error) {
 	bucketName, err := r.createBucketIfNotExists(ctx, file.User)
 	if err != nil {
 		return "", err
@@ -29,7 +31,7 @@ func (r *repository) SaveFile(ctx context.Context, file models.FileDTO) (url str
 		return "", err
 	}
 
-	u, err := r.client.PresignedGetObject(ctx, bucketName, file.Name, time.Hour*24*365, nil)
+	u, err := r.client.PresignedGetObject(ctx, bucketName, file.Name, URLExpiration, nil)
 	if err != nil {
 		return "", err
 	}
@@ -45,7 +47,7 @@ func (r *repository) createBucketIfNotExists(ctx context.Context, bucketName str
 	}
 
 	if !exists {
-		err := r.client.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{Region: location})
+		err := r.client.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{})
 		if err != nil {
 			return "", err
 		}

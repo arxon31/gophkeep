@@ -6,3 +6,7 @@ type SaveCredentialsDTO struct {
 	UserName string
 	Password string
 }
+
+func (dto SaveCredentialsDTO) Validate() error {
+	panic("implement me")
+}

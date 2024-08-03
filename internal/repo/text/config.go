@@ -1,4 +1,4 @@
-package docs
+package text
 
 import "github.com/ilyakaznacheev/cleanenv"
 

@@ -7,3 +7,7 @@ type SaveBankCredentialsDTO struct {
 	Owner      string
 	CVV        int64
 }
+
+func (dto SaveBankCredentialsDTO) Validate() error {
+	panic("implement me")
+}
