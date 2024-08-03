@@ -16,13 +16,6 @@ type cacheItem[V any] struct {
 	expiredAt int64
 }
 
-func (i cacheItem[V]) isExpired() bool {
-	if time.Now().Unix() > i.expiredAt {
-		return true
-	}
-	return false
-}
-
 func New[K comparable, V any](keyExpiration time.Duration) *cache[K, V] {
 	return &cache[K, V]{storage: make(map[K]cacheItem[V])}
 }
@@ -47,4 +40,11 @@ func (c *cache[K, V]) Get(key K) (value V, exists bool) {
 	}
 
 	return val.value, true
+}
+
+func (i cacheItem[V]) isExpired() bool {
+	if time.Now().Unix() > i.expiredAt {
+		return true
+	}
+	return false
 }

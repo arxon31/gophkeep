@@ -10,27 +10,37 @@ import (
 const expiration = time.Hour
 
 type sessionStorage interface {
-	Set(key string, value struct{})
-	Get(key string) (value struct{}, exists bool)
+	Set(key string, value any)
+	Get(key string) (value any, exists bool)
 }
 
 type sessionManager struct {
 	cache sessionStorage
 }
 
-func NewManager() *sessionManager {
-	return &sessionManager{cache: cache.New[string, struct{}](expiration)}
+type fileInfo struct {
+	meta     string
+	filename string
+	chunks   int64
 }
 
-func (s *sessionManager) Create() (sessionID string) {
+func NewManager() *sessionManager {
+	return &sessionManager{cache: cache.New[string, any](expiration)}
+}
+
+func (s *sessionManager) CreateSessionForFile(info any) (sessionID string) {
 	sessionID = uuid.New().String()
 
-	s.cache.Set(sessionID, struct{}{})
+	s.cache.Set(sessionID, info)
 
 	return sessionID
 }
 
-func (s *sessionManager) IsExists(sessionID string) bool {
-	_, ok := s.cache.Get(sessionID)
-	return ok
+func (s *sessionManager) GetInfo(sessionID string) (any, bool) {
+	val, ok := s.cache.Get(sessionID)
+	if !ok {
+		return nil, false
+	}
+
+	return val, true
 }

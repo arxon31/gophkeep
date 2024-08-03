@@ -14,9 +14,15 @@ func SetUserIntoContext(ctx context.Context, user string) context.Context {
 }
 
 func GetUserFromContext(ctx context.Context) (string, error) {
-	user, ok := ctx.Value("user").(string)
+	val := ctx.Value("user")
+	if val == nil {
+		return "", nil
+	}
+
+	user, ok := val.(string)
 	if !ok {
 		return "", ErrUnknownUser
 	}
+
 	return user, nil
 }

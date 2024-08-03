@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/arxon31/gophkeep/internal/models"
-	"github.com/arxon31/gophkeep/internal/models/requests"
+	"github.com/arxon31/gophkeep/internal/model"
+	"github.com/arxon31/gophkeep/internal/model/requests"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 
 	"github.com/arxon31/yapr-proto/pkg/gophkeep"
@@ -20,7 +20,7 @@ type textStorage interface {
 }
 
 type fileStorage interface {
-	SaveFile(ctx context.Context, file *models.FileDTO) (url string, err error)
+	SaveFile(ctx context.Context, file *model.FileDTO) (url string, err error)
 }
 
 type keepService struct {
@@ -32,13 +32,13 @@ func NewService(textStorage textStorage, fileStorage fileStorage) *keepService {
 	return &keepService{text: textStorage, file: fileStorage}
 }
 
-func (s *keepService) Keep(ctx context.Context, record interface{}) error {
+func (s *keepService) Keep(ctx context.Context, record any) error {
 	switch rec := record.(type) {
 	case *gophkeep.SaveCredentialsRequest:
 		return s.keepCredentials(ctx, rec)
 	case *gophkeep.SaveBankCredentialsRequest:
 		return s.keepBankCredentials(ctx, rec)
-	case *models.FileDTO:
+	case *model.FileDTO:
 		return s.keepFile(ctx, rec)
 	default:
 		return ErrUnknownRequest
@@ -89,7 +89,7 @@ func (s *keepService) keepBankCredentials(ctx context.Context, bankCreds *gophke
 	return s.text.SaveBankCredentials(ctx, bankCredsDTO)
 }
 
-func (s *keepService) keepFile(ctx context.Context, file *models.FileDTO) error {
+func (s *keepService) keepFile(ctx context.Context, file *model.FileDTO) error {
 	user, err := ctxfuncs.GetUserFromContext(ctx)
 	if err != nil {
 		return err
