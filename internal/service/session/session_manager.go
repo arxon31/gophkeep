@@ -3,8 +3,9 @@ package session
 import (
 	"time"
 
-	"github.com/arxon31/gophkeep/pkg/cache"
 	"github.com/google/uuid"
+
+	"github.com/arxon31/gophkeep/pkg/cache"
 )
 
 const expiration = time.Hour

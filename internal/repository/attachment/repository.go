@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/arxon31/gophkeep/internal/repository"
-	"github.com/arxon31/gophkeep/internal/repository/attachment/model"
+	"io"
+
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"io"
+
+	"github.com/arxon31/gophkeep/internal/repository"
+	"github.com/arxon31/gophkeep/internal/repository/attachment/model"
 )
 
 type repo struct {

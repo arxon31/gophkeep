@@ -3,16 +3,20 @@ package keep
 import (
 	"context"
 	"fmt"
+	"log/slog"
+
 	"github.com/arxon31/gophkeep/internal/model/card"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/gophkeep/internal/model/user"
 	cardmodel "github.com/arxon31/gophkeep/internal/repository/card/model"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
+	. "github.com/arxon31/gophkeep/pkg/logger"
 )
 
-func (ks *keepService) SaveCard(ctx context.Context, card *card.Card, cardMeta meta.Meta) error {
+func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta meta.Meta) error {
 	err := card.Validate()
 	if err != nil {
+		Logger.Error("attach validation", slog.String("error", err.Error()))
 		return ErrValidation
 	}
 

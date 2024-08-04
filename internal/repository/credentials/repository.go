@@ -3,10 +3,12 @@ package credentials
 import (
 	"context"
 	"errors"
-	"github.com/arxon31/gophkeep/internal/repository"
-	"github.com/arxon31/gophkeep/internal/repository/credentials/model"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/arxon31/gophkeep/internal/repository"
+	"github.com/arxon31/gophkeep/internal/repository/credentials/model"
 )
 
 type repo struct {

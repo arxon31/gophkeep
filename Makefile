@@ -26,7 +26,7 @@ lint:
 	golangci-lint run ./... --config=./.golangci.yml
 
 format:
-	goimports -local "github.com/arxon31/sso" -w `pwd`
+	goimports -local "github.com/arxon31/gophkeep" -w `pwd`
 
 run:
 	docker-compose -f ./deployments/docker-compose-dev.yml up -d --build

@@ -3,10 +3,11 @@ package sync
 import (
 	"context"
 
+	"github.com/arxon31/yapr-proto/pkg/gophkeep"
+
 	"github.com/arxon31/gophkeep/internal/model/requests"
 	"github.com/arxon31/gophkeep/internal/model/responses"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
-	"github.com/arxon31/yapr-proto/pkg/gophkeep"
 )
 
 type provider interface {

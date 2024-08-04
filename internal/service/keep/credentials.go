@@ -2,6 +2,7 @@ package keep
 
 import (
 	"context"
+
 	"github.com/arxon31/gophkeep/internal/model/credentials"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/gophkeep/internal/model/user"
@@ -9,13 +10,13 @@ import (
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 )
 
-func (ks *keepService) SaveCredentials(ctx context.Context, creds *credentials.Credentials, cardMeta meta.Meta) error {
+func (ks *keepService) KeepCredentials(ctx context.Context, creds *credentials.Credentials, credsMeta meta.Meta) error {
 	err := creds.Validate()
 	if err != nil {
 		return ErrValidation
 	}
 
-	err = cardMeta.Validate()
+	err = credsMeta.Validate()
 	if err != nil {
 		return ErrValidation
 	}
@@ -42,7 +43,7 @@ func (ks *keepService) SaveCredentials(ctx context.Context, creds *credentials.C
 
 	dbCreds := &credsmodel.Credentials{
 		User:         u,
-		Meta:         string(cardMeta),
+		Meta:         string(credsMeta),
 		PasswordHash: passwordHash,
 		PasswordSalt: passwordSalt,
 		UserNameHash: usernameHash,
