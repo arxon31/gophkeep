@@ -12,16 +12,16 @@ import (
 )
 
 func (ss *syncService) SyncAttachment(ctx context.Context, req *meta.Meta) (*attachment.Attachment, error) {
-	err := req.Validate()
-	if err != nil {
-		Logger.Error("attachment meta validation", slog.String("error", err.Error()))
-		return nil, ErrValidation
-	}
-
 	u, err := ctxfuncs.GetUserFromContext(ctx)
 	if err != nil {
 		Logger.Error("extracting user from context", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
+	}
+
+	err = req.Validate()
+	if err != nil {
+		Logger.Error("attachment meta validation", slog.String("error", err.Error()))
+		return nil, ErrValidation
 	}
 
 	err = user.User(u).Validate()

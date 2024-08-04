@@ -24,7 +24,7 @@ func main() {
 }
 
 func run() error {
-	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGKILL, syscall.SIGTERM, syscall.SIGINT)
+	_, cancel := signal.NotifyContext(context.Background(), syscall.SIGKILL, syscall.SIGTERM, syscall.SIGINT)
 	defer cancel()
 
 	return nil

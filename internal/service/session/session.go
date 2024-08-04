@@ -18,3 +18,7 @@ func (s *sessionService) Info(sessionID string) (any, bool) {
 
 	return val, true
 }
+
+func (s *sessionService) Delete(sessionID string) {
+	s.cache.Delete(sessionID)
+}

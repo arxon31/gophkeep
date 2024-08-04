@@ -7,18 +7,22 @@ import (
 	credsmodel "github.com/arxon31/gophkeep/internal/repository/credentials/dto"
 )
 
+//go:generate moq -out card_moq_test.go . cardProvider
 type cardProvider interface {
 	GetCard(ctx context.Context, req *cardmodel.GetCard) (*cardmodel.Card, error)
 }
 
+//go:generate moq -out creds_moq_test.go . credentialsProvider
 type credentialsProvider interface {
 	GetCredentials(ctx context.Context, req *credsmodel.GetCredentials) (*credsmodel.Credentials, error)
 }
 
+//go:generate moq -out attachs_moq_test.go . attachmentsProvider
 type attachmentsProvider interface {
 	GetAttachment(ctx context.Context, req *attachmodel.GetAttachment) (*attachmodel.Attachment, error)
 }
 
+//go:generate moq -out decryptor_moq_test.go . decryptor
 type decryptor interface {
 	Decrypt([]byte) ([]byte, error)
 }

@@ -14,7 +14,13 @@ import (
 )
 
 func (ks *keepService) KeepAttachment(ctx context.Context, attach *attachment.Attachment, attachMeta meta.Meta) error {
-	err := attach.Validate()
+	u, err := ctxfuncs.GetUserFromContext(ctx)
+	if err != nil {
+		Logger.Error("extracting user from context", slog.String("error", err.Error()))
+		return ErrSomethingWentWrong
+	}
+
+	err = attach.Validate()
 	if err != nil {
 		Logger.Error("attach validation", slog.String("error", err.Error()))
 		return ErrValidation
@@ -24,12 +30,6 @@ func (ks *keepService) KeepAttachment(ctx context.Context, attach *attachment.At
 	if err != nil {
 		Logger.Error("attach meta validation", slog.String("error", err.Error()))
 		return ErrValidation
-	}
-
-	u, err := ctxfuncs.GetUserFromContext(ctx)
-	if err != nil {
-		Logger.Error("extracting user from context", slog.String("error", err.Error()))
-		return ErrSomethingWentWrong
 	}
 
 	err = user.User(u).Validate()

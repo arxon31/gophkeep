@@ -42,6 +42,12 @@ func (c *cache[K, V]) Get(key K) (value V, exists bool) {
 	return val.value, true
 }
 
+func (c *cache[K, V]) Delete(key K) {
+	c.mu.Lock()
+	delete(c.storage, key)
+	c.mu.Unlock()
+}
+
 func (i cacheItem[V]) isExpired() bool {
 	if time.Now().Unix() > i.expiredAt {
 		return true

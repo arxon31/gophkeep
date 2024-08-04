@@ -13,7 +13,13 @@ import (
 )
 
 func (ks *keepService) KeepCredentials(ctx context.Context, creds *credentials.Credentials, credsMeta meta.Meta) error {
-	err := creds.Validate()
+	u, err := ctxfuncs.GetUserFromContext(ctx)
+	if err != nil {
+		Logger.Error("extracting user from context", slog.String("error", err.Error()))
+		return ErrSomethingWentWrong
+	}
+
+	err = creds.Validate()
 	if err != nil {
 		Logger.Error("credentials validation", slog.String("error", err.Error()))
 		return ErrValidation
@@ -23,12 +29,6 @@ func (ks *keepService) KeepCredentials(ctx context.Context, creds *credentials.C
 	if err != nil {
 		Logger.Error("credentials meta validation", slog.String("error", err.Error()))
 		return ErrValidation
-	}
-
-	u, err := ctxfuncs.GetUserFromContext(ctx)
-	if err != nil {
-		Logger.Error("extracting user from context", slog.String("error", err.Error()))
-		return ErrSomethingWentWrong
 	}
 
 	err = user.User(u).Validate()

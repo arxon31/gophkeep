@@ -13,7 +13,7 @@ func TestCardToService(t *testing.T) {
 		Meta:   &gophkeep.Meta{Meta: "meta"},
 		Number: "123",
 		Owner:  "owner",
-		Cvv:    123,
+		Cvv:    "123",
 	}
 
 	card, meta := CardToService(c)
@@ -30,7 +30,7 @@ func TestCardToProto(t *testing.T) {
 	c := &card.Card{
 		Owner:  "owner",
 		Number: "123",
-		CVV:    123,
+		CVV:    "123",
 		Type:   model.CARD,
 	}
 

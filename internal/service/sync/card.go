@@ -11,17 +11,17 @@ import (
 	"log/slog"
 )
 
-func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (resp *card.Card, err error) {
-	err = req.Validate()
-	if err != nil {
-		Logger.Error("attachment meta validation", slog.String("error", err.Error()))
-		return nil, ErrValidation
-	}
-
+func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (*card.Card, error) {
 	u, err := ctxfuncs.GetUserFromContext(ctx)
 	if err != nil {
 		Logger.Error("extracting user from context", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
+	}
+
+	err = req.Validate()
+	if err != nil {
+		Logger.Error("attachment meta validation", slog.String("error", err.Error()))
+		return nil, ErrValidation
 	}
 
 	err = user.User(u).Validate()

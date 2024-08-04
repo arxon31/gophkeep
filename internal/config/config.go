@@ -3,9 +3,9 @@ package config
 import "github.com/ilyakaznacheev/cleanenv"
 
 type Config struct {
-	Mongo     Mongo
-	S3        S3
-	CryptoKey string `env:"CRYPTO_KEY" env-required:"true"`
+	Mongo   Mongo
+	S3      S3
+	Secrets Secrets
 }
 
 type Mongo struct {
@@ -17,6 +17,11 @@ type S3 struct {
 	URI      string `env:"S3_URI" env-required:"true"`
 	User     string `env:"S3_USER" env-required:"true"`
 	Password string `env:"S3_PASSWORD" env-required:"true"`
+}
+
+type Secrets struct {
+	CryptoKey string `env:"CRYPTO_KEY" env-required:"true"`
+	JWTKey    string `env:"JWT_KEY" env-required:"true"`
 }
 
 func NewConfig() (*Config, error) {

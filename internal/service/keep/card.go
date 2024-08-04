@@ -2,7 +2,6 @@ package keep
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 
 	"github.com/arxon31/gophkeep/internal/model/card"
@@ -14,7 +13,13 @@ import (
 )
 
 func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta meta.Meta) error {
-	err := card.Validate()
+	u, err := ctxfuncs.GetUserFromContext(ctx)
+	if err != nil {
+		Logger.Error("extracting user from context", slog.String("error", err.Error()))
+		return ErrSomethingWentWrong
+	}
+
+	err = card.Validate()
 	if err != nil {
 		Logger.Error("card validation", slog.String("error", err.Error()))
 		return ErrValidation
@@ -24,12 +29,6 @@ func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta m
 	if err != nil {
 		Logger.Error("card meta validation", slog.String("error", err.Error()))
 		return ErrValidation
-	}
-
-	u, err := ctxfuncs.GetUserFromContext(ctx)
-	if err != nil {
-		Logger.Error("extracting user from context", slog.String("error", err.Error()))
-		return ErrSomethingWentWrong
 	}
 
 	err = user.User(u).Validate()
@@ -44,7 +43,7 @@ func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta m
 		return ErrSomethingWentWrong
 	}
 
-	cvvHash, err := ks.encryptor.Encrypt([]byte(fmt.Sprintf("%d", card.CVV)))
+	cvvHash, err := ks.encryptor.Encrypt([]byte(card.CVV))
 	if err != nil {
 		Logger.Error("card cvv encrypting", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
