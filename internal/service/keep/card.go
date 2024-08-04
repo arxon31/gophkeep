@@ -38,26 +38,24 @@ func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta m
 		return ErrValidation
 	}
 
-	numberHash, numberSalt, err := ks.hasher.Hash([]byte(card.Number))
+	numberHash, err := ks.encryptor.Encrypt([]byte(card.Number))
 	if err != nil {
-		Logger.Error("card number hashing", slog.String("error", err.Error()))
+		Logger.Error("card number encrypting", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
-	cvvHash, cvvSalt, err := ks.hasher.Hash([]byte(fmt.Sprintf("%d", card.CVV)))
+	cvvHash, err := ks.encryptor.Encrypt([]byte(fmt.Sprintf("%d", card.CVV)))
 	if err != nil {
-		Logger.Error("card cvv hashing", slog.String("error", err.Error()))
+		Logger.Error("card cvv encrypting", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
 	dbCard := &cardmodel.Card{
-		User:       u,
-		Meta:       string(cardMeta),
-		Owner:      u,
-		NumberHash: numberHash,
-		NumberSalt: numberSalt,
-		CVVHash:    cvvHash,
-		CVVSalt:    cvvSalt,
+		User:             u,
+		Meta:             string(cardMeta),
+		Owner:            u,
+		EncpryptedNumber: numberHash,
+		EncrpytedCVV:     cvvHash,
 	}
 
 	err = ks.card.SaveCard(ctx, dbCard)

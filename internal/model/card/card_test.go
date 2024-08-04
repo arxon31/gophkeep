@@ -15,9 +15,8 @@ func TestCard_Validate(t *testing.T) {
 		{"empty name", &Card{}, ErrEmptyOwner},
 		{"empty number", &Card{Owner: "owner"}, ErrEmptyCardNumber},
 		{"empty cvv", &Card{Owner: "owner", Number: "number"}, ErrEmptyCVV},
-		{"invalid cvv", &Card{Owner: "owner", Number: "number", CVV: -1}, ErrInvalidCVV},
-		{"invalid type", &Card{Owner: "owner", Number: "number", CVV: 1}, ErrInvalidType},
-		{"valid", &Card{Owner: "owner", Number: "number", CVV: 1, Type: model.CARD}, nil},
+		{"invalid type", &Card{Owner: "owner", Number: "number", CVV: "1"}, ErrInvalidType},
+		{"valid", &Card{Owner: "owner", Number: "number", CVV: "1", Type: model.CARD}, nil},
 	}
 
 	for _, tt := range tc {

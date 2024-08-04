@@ -13,6 +13,7 @@ func TestNewConfig(t *testing.T) {
 		t.Setenv("S3_URI", "s3")
 		t.Setenv("S3_USER", "s3")
 		t.Setenv("S3_PASSWORD", "s3")
+		t.Setenv("CRYPTO_KEY", "key")
 		cfg, err := NewConfig()
 		require.NoError(t, err)
 		require.Equal(t, "mongo", cfg.Mongo.URI)
@@ -20,6 +21,7 @@ func TestNewConfig(t *testing.T) {
 		require.Equal(t, "s3", cfg.S3.URI)
 		require.Equal(t, "s3", cfg.S3.User)
 		require.Equal(t, "s3", cfg.S3.Password)
+		require.Equal(t, "key", cfg.CryptoKey)
 	})
 
 	t.Run("must_return_error", func(t *testing.T) {

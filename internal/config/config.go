@@ -3,8 +3,9 @@ package config
 import "github.com/ilyakaznacheev/cleanenv"
 
 type Config struct {
-	Mongo Mongo
-	S3    S3
+	Mongo     Mongo
+	S3        S3
+	CryptoKey string `env:"CRYPTO_KEY" env-required:"true"`
 }
 
 type Mongo struct {

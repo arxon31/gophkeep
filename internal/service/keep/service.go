@@ -20,21 +20,22 @@ type attachmentsStorage interface {
 	SaveAttachment(ctx context.Context, attachmentInfo *attachsmodel.Attachment) error
 }
 
-type hasher interface {
-	Hash(src []byte) (res, salt []byte, err error)
+type encryptor interface {
+	Encrypt(src []byte) ([]byte, error)
 }
 
 type keepService struct {
-	card    cardStorage
-	creds   credentialsStorage
-	attachs attachmentsStorage
-	hasher  hasher
+	card      cardStorage
+	creds     credentialsStorage
+	attachs   attachmentsStorage
+	encryptor encryptor
 }
 
-func NewService(cardStorage cardStorage, credsStorage credentialsStorage, attachsStorage attachmentsStorage, hasher hasher) *keepService {
+func NewService(cardStorage cardStorage, credsStorage credentialsStorage, attachsStorage attachmentsStorage, encryptor encryptor) *keepService {
 	return &keepService{
-		card:    cardStorage,
-		creds:   credsStorage,
-		attachs: attachsStorage,
+		card:      cardStorage,
+		creds:     credsStorage,
+		attachs:   attachsStorage,
+		encryptor: encryptor,
 	}
 }

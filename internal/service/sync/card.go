@@ -9,7 +9,6 @@ import (
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 	. "github.com/arxon31/gophkeep/pkg/logger"
 	"log/slog"
-	"strconv"
 )
 
 func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (resp *card.Card, err error) {
@@ -35,35 +34,29 @@ func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (resp *card
 
 	cardFromDB, err := ss.card.GetCard(ctx, cardDB)
 	if err != nil {
-		Logger.Error("get attachment", slog.String("error", err.Error()))
+		Logger.Error("get card", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
 	}
 
-	hashedCard := converter.ToService(cardFromDB)
+	encryptedCard := converter.ToService(cardFromDB)
 
-	cvvString, err := ss.unhasher.Unhash(hashedCard.CVVHash, hashedCard.CVVSalt)
+	cvv, err := ss.decryptor.Decrypt(encryptedCard.EncryptedCVV)
 	if err != nil {
-		Logger.Error("card cvv unhashing", slog.String("error", err.Error()))
+		Logger.Error("card cvv decrypting", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
 	}
 
-	cvv, err := strconv.ParseInt(cvvString, 10, 32)
+	number, err := ss.decryptor.Decrypt(encryptedCard.EncryptedNumber)
 	if err != nil {
-		Logger.Error("card cvv parsing", slog.String("error", err.Error()))
-		return nil, ErrSomethingWentWrong
-	}
-
-	number, err := ss.unhasher.Unhash(hashedCard.NumberHash, hashedCard.NumberSalt)
-	if err != nil {
-		Logger.Error("card number unhashing", slog.String("error", err.Error()))
+		Logger.Error("card number decrypting", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
 	}
 
 	return &card.Card{
-		Owner:  hashedCard.Owner,
-		Number: number,
-		CVV:    cvv,
-		Type:   hashedCard.Type,
+		Owner:  encryptedCard.Owner,
+		Number: string(number),
+		CVV:    string(cvv),
+		Type:   encryptedCard.Type,
 	}, nil
 
 }

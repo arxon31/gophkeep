@@ -38,23 +38,23 @@ func (ss *syncService) SyncCredentials(ctx context.Context, req *meta.Meta) (res
 		return nil, ErrSomethingWentWrong
 	}
 
-	hashedCreds := converter.ToService(credsFromDB)
+	encryptedCreds := converter.ToService(credsFromDB)
 
-	username, err := ss.unhasher.Unhash(hashedCreds.UserNameHash, hashedCreds.UserNameSalt)
+	username, err := ss.decryptor.Decrypt(encryptedCreds.EncryptedUserName)
 	if err != nil {
-		Logger.Error("username unhashing", slog.String("error", err.Error()))
+		Logger.Error("username decrypting", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
 	}
 
-	password, err := ss.unhasher.Unhash(hashedCreds.PasswordHash, hashedCreds.PasswordSalt)
+	password, err := ss.decryptor.Decrypt(encryptedCreds.EncryptedPassword)
 	if err != nil {
-		Logger.Error("password unhashing", slog.String("error", err.Error()))
+		Logger.Error("password decrypting", slog.String("error", err.Error()))
 		return nil, ErrSomethingWentWrong
 	}
 
 	return &credentials.Credentials{
-		UserName: username,
-		Password: password,
-		Type:     hashedCreds.Type,
+		UserName: string(username),
+		Password: string(password),
+		Type:     encryptedCreds.Type,
 	}, nil
 }

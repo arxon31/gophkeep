@@ -7,17 +7,15 @@ import (
 type Card struct {
 	Owner  string
 	Number string
-	CVV    int64
+	CVV    string
 	Type   int
 }
 
-type HashedCard struct {
-	Owner      string
-	NumberHash []byte
-	NumberSalt []byte
-	CVVHash    []byte
-	CVVSalt    []byte
-	Type       int
+type CryptedCard struct {
+	Owner           string
+	EncryptedNumber []byte
+	EncryptedCVV    []byte
+	Type            int
 }
 
 func (b Card) Validate() error {
@@ -29,12 +27,8 @@ func (b Card) Validate() error {
 		return ErrEmptyCardNumber
 	}
 
-	if b.CVV == 0 {
+	if b.CVV == "" {
 		return ErrEmptyCVV
-	}
-
-	if b.CVV < 0 {
-		return ErrInvalidCVV
 	}
 
 	if b.Type != model.CARD {

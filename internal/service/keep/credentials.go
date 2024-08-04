@@ -37,25 +37,23 @@ func (ks *keepService) KeepCredentials(ctx context.Context, creds *credentials.C
 		return ErrValidation
 	}
 
-	usernameHash, usernameSalt, err := ks.hasher.Hash([]byte(creds.UserName))
+	encryptedUserName, err := ks.encryptor.Encrypt([]byte(creds.UserName))
 	if err != nil {
-		Logger.Error("username hashing", slog.String("error", err.Error()))
+		Logger.Error("username encrypting", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
-	passwordHash, passwordSalt, err := ks.hasher.Hash([]byte(creds.Password))
+	encryptedPassword, err := ks.encryptor.Encrypt([]byte(creds.Password))
 	if err != nil {
-		Logger.Error("password hashing", slog.String("error", err.Error()))
+		Logger.Error("password encrypting", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
 	dbCreds := &credsmodel.Credentials{
-		User:         u,
-		Meta:         string(credsMeta),
-		PasswordHash: passwordHash,
-		PasswordSalt: passwordSalt,
-		UserNameHash: usernameHash,
-		UserNameSalt: usernameSalt,
+		User:              u,
+		Meta:              string(credsMeta),
+		EncryptedPassword: encryptedPassword,
+		EncryptedUserName: encryptedUserName,
 	}
 
 	err = ks.creds.SaveCredentials(ctx, dbCreds)

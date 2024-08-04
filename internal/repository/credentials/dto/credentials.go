@@ -1,12 +1,10 @@
 package dto
 
 type Credentials struct {
-	User         string
-	Meta         string `bson:"meta"`
-	UserNameHash []byte `bson:"username_hash"`
-	UserNameSalt []byte `bson:"username_salt"`
-	PasswordHash []byte `bson:"password_hash"`
-	PasswordSalt []byte `bson:"password_salt"`
+	User              string
+	Meta              string `bson:"meta"`
+	EncryptedUserName []byte `bson:"username_enc"`
+	EncryptedPassword []byte `bson:"password_enc"`
 }
 
 type GetCredentials struct {

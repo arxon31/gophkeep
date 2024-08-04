@@ -15,13 +15,11 @@ func FromService(user user.User, meta meta.Meta) *dto.GetCard {
 	}
 }
 
-func ToService(c *dto.Card) *card.HashedCard {
-	return &card.HashedCard{
-		Owner:      c.Owner,
-		NumberHash: c.NumberHash,
-		NumberSalt: c.NumberSalt,
-		CVVHash:    c.CVVHash,
-		CVVSalt:    c.CVVSalt,
-		Type:       model.CARD,
+func ToService(c *dto.Card) *card.CryptedCard {
+	return &card.CryptedCard{
+		Owner:           c.Owner,
+		EncryptedNumber: c.EncpryptedNumber,
+		EncryptedCVV:    c.EncrpytedCVV,
+		Type:            model.CARD,
 	}
 }

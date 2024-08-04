@@ -10,12 +10,10 @@ type Credentials struct {
 	Type     int
 }
 
-type HashedCredentials struct {
-	UserNameHash []byte
-	UserNameSalt []byte
-	PasswordHash []byte
-	PasswordSalt []byte
-	Type         int
+type EncryptedCredentials struct {
+	EncryptedUserName []byte
+	EncryptedPassword []byte
+	Type              int
 }
 
 func (c Credentials) Validate() error {

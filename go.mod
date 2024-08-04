@@ -3,7 +3,8 @@ module github.com/arxon31/gophkeep
 go 1.21.4
 
 require (
-	github.com/arxon31/yapr-proto v1.0.3
+	github.com/arxon31/yapr-proto v1.0.4
+	github.com/google/uuid v1.6.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/minio/minio-go/v7 v7.0.74
@@ -20,7 +21,6 @@ require (
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect

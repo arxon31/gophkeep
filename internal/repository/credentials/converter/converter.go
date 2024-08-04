@@ -15,12 +15,10 @@ func FromService(user user.User, meta meta.Meta) *dto.GetCredentials {
 	}
 }
 
-func ToService(creds *dto.Credentials) *credentials.HashedCredentials {
-	return &credentials.HashedCredentials{
-		UserNameHash: creds.UserNameHash,
-		UserNameSalt: creds.UserNameSalt,
-		PasswordHash: creds.PasswordHash,
-		PasswordSalt: creds.PasswordSalt,
-		Type:         model.CREDENTIALS,
+func ToService(creds *dto.Credentials) *credentials.EncryptedCredentials {
+	return &credentials.EncryptedCredentials{
+		EncryptedUserName: creds.EncryptedUserName,
+		EncryptedPassword: creds.EncryptedPassword,
+		Type:              model.CREDENTIALS,
 	}
 }

@@ -19,17 +19,17 @@ type attachmentsProvider interface {
 	GetAttachment(ctx context.Context, req *attachmodel.GetAttachment) (*attachmodel.Attachment, error)
 }
 
-type unhasher interface {
-	Unhash(hash, salt []byte) (string, error)
+type decryptor interface {
+	Decrypt([]byte) ([]byte, error)
 }
 
 type syncService struct {
 	card        cardProvider
 	creds       credentialsProvider
 	attachments attachmentsProvider
-	unhasher    unhasher
+	decryptor   decryptor
 }
 
-func NewService(card cardProvider, creds credentialsProvider, attachments attachmentsProvider, unhash unhasher) *syncService {
-	return &syncService{card: card, creds: creds, attachments: attachments, unhasher: unhash}
+func NewService(card cardProvider, creds credentialsProvider, attachments attachmentsProvider, decryptor decryptor) *syncService {
+	return &syncService{card: card, creds: creds, attachments: attachments, decryptor: decryptor}
 }
