@@ -2,7 +2,9 @@ package attachment
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"github.com/arxon31/gophkeep/internal/repository"
 	"github.com/arxon31/gophkeep/internal/repository/attachment/model"
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,16 +12,16 @@ import (
 	"io"
 )
 
-type repository struct {
+type repo struct {
 	s3    *minio.Client
 	mongo *mongo.Database
 }
 
-func New(s3 *minio.Client, mongo *mongo.Database) *repository {
-	return &repository{s3: s3, mongo: mongo}
+func New(s3 *minio.Client, mongo *mongo.Database) *repo {
+	return &repo{s3: s3, mongo: mongo}
 }
 
-func (r *repository) SaveAttachment(ctx context.Context, attachmentInfo *model.Attachment) error {
+func (r *repo) SaveAttachment(ctx context.Context, attachmentInfo *model.Attachment) error {
 	bucketName, err := r.createBucketIfNotExists(ctx, attachmentInfo.User)
 	if err != nil {
 		return err
@@ -42,7 +44,7 @@ func (r *repository) SaveAttachment(ctx context.Context, attachmentInfo *model.A
 	return nil
 }
 
-func (r *repository) GetAttachment(ctx context.Context, req *model.GetAttachment) (*model.Attachment, error) {
+func (r *repo) GetAttachment(ctx context.Context, req *model.GetAttachment) (*model.Attachment, error) {
 	exists, err := r.isBucketExists(ctx, req.User)
 	if err != nil {
 		return nil, err
@@ -62,7 +64,12 @@ func (r *repository) GetAttachment(ctx context.Context, req *model.GetAttachment
 
 	err = res.Decode(&attachment)
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, mongo.ErrNoDocuments):
+			return nil, repository.ErrNotFound
+		default:
+			return nil, err
+		}
 	}
 
 	obj, err := r.s3.GetObject(ctx, req.User, attachment.Name, minio.GetObjectOptions{})
@@ -83,7 +90,7 @@ func (r *repository) GetAttachment(ctx context.Context, req *model.GetAttachment
 	return attachment, nil
 }
 
-func (r *repository) createBucketIfNotExists(ctx context.Context, bucketName string) (string, error) {
+func (r *repo) createBucketIfNotExists(ctx context.Context, bucketName string) (string, error) {
 	exists, err := r.isBucketExists(ctx, bucketName)
 	if err != nil {
 		return "", err
@@ -100,6 +107,6 @@ func (r *repository) createBucketIfNotExists(ctx context.Context, bucketName str
 	return bucketName, nil
 }
 
-func (r *repository) isBucketExists(ctx context.Context, bucketName string) (bool, error) {
+func (r *repo) isBucketExists(ctx context.Context, bucketName string) (bool, error) {
 	return r.s3.BucketExists(ctx, bucketName)
 }

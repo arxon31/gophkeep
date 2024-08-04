@@ -31,6 +31,10 @@ func (b Card) Validate() error {
 		return ErrEmptyCVV
 	}
 
+	if b.CVV < 0 {
+		return ErrInvalidCVV
+	}
+
 	if b.Type != types.CARD {
 		return ErrInvalidType
 	}

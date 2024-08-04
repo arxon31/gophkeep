@@ -3,7 +3,7 @@ module github.com/arxon31/gophkeep
 go 1.21.4
 
 require (
-	github.com/arxon31/yapr-proto v1.0.2
+	github.com/arxon31/yapr-proto v1.0.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/minio/minio-go/v7 v7.0.74

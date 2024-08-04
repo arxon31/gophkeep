@@ -2,25 +2,25 @@ package card
 
 import (
 	"context"
+	"errors"
+	"github.com/arxon31/gophkeep/internal/repository"
 	"github.com/arxon31/gophkeep/internal/repository/card/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type repository struct {
+type repo struct {
 	mongo *mongo.Database
 }
 
-func New(mongo *mongo.Database) *repository {
-	return &repository{mongo: mongo}
+func New(mongo *mongo.Database) *repo {
+	return &repo{mongo: mongo}
 }
 
-func (r *repository) SaveCard(ctx context.Context, card *model.Card) error {
+func (r *repo) SaveCard(ctx context.Context, card *model.Card) error {
 	coll := r.mongo.Collection(card.User)
 
-	bsonCard := bson.M{"meta": card.Meta, "owner": card.Owner, "number_hash": card.NumberHash, "number_salt": card.NumberSalt, "cvv_hash": card.CVVHash, "cvv_salt": card.CVVSalt}
-
-	_, err := coll.InsertOne(ctx, bsonCard)
+	_, err := coll.InsertOne(ctx, card)
 	if err != nil {
 		return err
 	}
@@ -28,14 +28,19 @@ func (r *repository) SaveCard(ctx context.Context, card *model.Card) error {
 	return nil
 }
 
-func (r *repository) GetCard(ctx context.Context, req *model.GetCard) (*model.Card, error) {
+func (r *repo) GetCard(ctx context.Context, req *model.GetCard) (*model.Card, error) {
 	coll := r.mongo.Collection(req.User)
 
 	var card *model.Card
 
 	err := coll.FindOne(ctx, bson.M{"meta": req.Meta}).Decode(&card)
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, mongo.ErrNoDocuments):
+			return nil, repository.ErrNotFound
+		default:
+			return nil, err
+		}
 	}
 
 	return card, nil

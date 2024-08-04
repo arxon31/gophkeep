@@ -7,4 +7,5 @@ var (
 	ErrEmptyOwner      = errors.New("owner cannot be empty")
 	ErrEmptyCVV        = errors.New("cvv cannot be empty")
 	ErrInvalidType     = errors.New("invalid type")
+	ErrInvalidCVV      = errors.New("invalid cvv")
 )

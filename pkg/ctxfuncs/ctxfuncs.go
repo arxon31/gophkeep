@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-var ErrUnknownUser = errors.New("unknown user")
+var ErrUnknownUser = errors.New("unknown user type")
 
 const userKey = "user"
 
