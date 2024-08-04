@@ -3,9 +3,9 @@ package keep
 import (
 	"context"
 
-	attachsmodel "github.com/arxon31/gophkeep/internal/repository/attachment/model"
-	cardmodel "github.com/arxon31/gophkeep/internal/repository/card/model"
-	credsmodel "github.com/arxon31/gophkeep/internal/repository/credentials/model"
+	attachsmodel "github.com/arxon31/gophkeep/internal/repository/attachment/dto"
+	cardmodel "github.com/arxon31/gophkeep/internal/repository/card/dto"
+	credsmodel "github.com/arxon31/gophkeep/internal/repository/credentials/dto"
 )
 
 type cardStorage interface {

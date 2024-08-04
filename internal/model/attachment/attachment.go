@@ -1,6 +1,8 @@
 package attachment
 
-import "github.com/arxon31/gophkeep/internal/model/types"
+import (
+	"github.com/arxon31/gophkeep/internal/model"
+)
 
 type Attachment struct {
 	Name    string
@@ -17,7 +19,7 @@ func (a *Attachment) Validate() error {
 		return ErrEmptyContent
 	}
 
-	if a.Type != types.ATTACHMENT {
+	if a.Type != model.ATTACHMENT {
 		return ErrInvalidType
 	}
 

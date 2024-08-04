@@ -30,7 +30,7 @@ func (ss *syncService) SyncCredentials(ctx context.Context, req *meta.Meta) (res
 		return nil, ErrValidation
 	}
 
-	credentialsDB := converter.RequestFromService(user.User(u), *req)
+	credentialsDB := converter.FromService(user.User(u), *req)
 
 	credsFromDB, err := ss.creds.GetCredentials(ctx, credentialsDB)
 	if err != nil {
@@ -38,7 +38,7 @@ func (ss *syncService) SyncCredentials(ctx context.Context, req *meta.Meta) (res
 		return nil, ErrSomethingWentWrong
 	}
 
-	hashedCreds := converter.CredentialsToService(credsFromDB)
+	hashedCreds := converter.ToService(credsFromDB)
 
 	username, err := ss.unhasher.Unhash(hashedCreds.UserNameHash, hashedCreds.UserNameSalt)
 	if err != nil {

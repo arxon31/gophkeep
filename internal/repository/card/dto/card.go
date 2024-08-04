@@ -1,4 +1,4 @@
-package model
+package dto
 
 type GetCard struct {
 	User string

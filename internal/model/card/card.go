@@ -1,6 +1,8 @@
 package card
 
-import "github.com/arxon31/gophkeep/internal/model/types"
+import (
+	"github.com/arxon31/gophkeep/internal/model"
+)
 
 type Card struct {
 	Owner  string
@@ -35,7 +37,7 @@ func (b Card) Validate() error {
 		return ErrInvalidCVV
 	}
 
-	if b.Type != types.CARD {
+	if b.Type != model.CARD {
 		return ErrInvalidType
 	}
 

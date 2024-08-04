@@ -1,6 +1,8 @@
 package credentials
 
-import "github.com/arxon31/gophkeep/internal/model/types"
+import (
+	"github.com/arxon31/gophkeep/internal/model"
+)
 
 type Credentials struct {
 	UserName string
@@ -25,7 +27,7 @@ func (c Credentials) Validate() error {
 		return ErrEmptyPassword
 	}
 
-	if c.Type != types.CREDENTIALS {
+	if c.Type != model.CREDENTIALS {
 		return ErrInvalidType
 	}
 

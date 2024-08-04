@@ -1,4 +1,4 @@
-package model
+package dto
 
 type Credentials struct {
 	User         string

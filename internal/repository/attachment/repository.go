@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/arxon31/gophkeep/internal/repository"
-	"github.com/arxon31/gophkeep/internal/repository/attachment/model"
+	"github.com/arxon31/gophkeep/internal/repository/attachment/dto"
 )
 
 type repo struct {
@@ -23,7 +23,7 @@ func New(s3 *minio.Client, mongo *mongo.Database) *repo {
 	return &repo{s3: s3, mongo: mongo}
 }
 
-func (r *repo) SaveAttachment(ctx context.Context, attachmentInfo *model.Attachment) error {
+func (r *repo) SaveAttachment(ctx context.Context, attachmentInfo *dto.Attachment) error {
 	bucketName, err := r.createBucketIfNotExists(ctx, attachmentInfo.User)
 	if err != nil {
 		return err
@@ -46,7 +46,7 @@ func (r *repo) SaveAttachment(ctx context.Context, attachmentInfo *model.Attachm
 	return nil
 }
 
-func (r *repo) GetAttachment(ctx context.Context, req *model.GetAttachment) (*model.Attachment, error) {
+func (r *repo) GetAttachment(ctx context.Context, req *dto.GetAttachment) (*dto.Attachment, error) {
 	exists, err := r.isBucketExists(ctx, req.User)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (r *repo) GetAttachment(ctx context.Context, req *model.GetAttachment) (*mo
 
 	res := coll.FindOne(ctx, filter)
 
-	var attachment *model.Attachment
+	var attachment *dto.Attachment
 
 	err = res.Decode(&attachment)
 	if err != nil {

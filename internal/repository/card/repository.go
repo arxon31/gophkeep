@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/arxon31/gophkeep/internal/repository"
-	"github.com/arxon31/gophkeep/internal/repository/card/model"
+	"github.com/arxon31/gophkeep/internal/repository/card/dto"
 )
 
 type repo struct {
@@ -19,7 +19,7 @@ func New(mongo *mongo.Database) *repo {
 	return &repo{mongo: mongo}
 }
 
-func (r *repo) SaveCard(ctx context.Context, card *model.Card) error {
+func (r *repo) SaveCard(ctx context.Context, card *dto.Card) error {
 	coll := r.mongo.Collection(card.User)
 
 	_, err := coll.InsertOne(ctx, card)
@@ -30,10 +30,10 @@ func (r *repo) SaveCard(ctx context.Context, card *model.Card) error {
 	return nil
 }
 
-func (r *repo) GetCard(ctx context.Context, req *model.GetCard) (*model.Card, error) {
+func (r *repo) GetCard(ctx context.Context, req *dto.GetCard) (*dto.Card, error) {
 	coll := r.mongo.Collection(req.User)
 
-	var card *model.Card
+	var card *dto.Card
 
 	err := coll.FindOne(ctx, bson.M{"meta": req.Meta}).Decode(&card)
 	if err != nil {

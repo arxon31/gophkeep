@@ -8,7 +8,7 @@ import (
 	"github.com/arxon31/gophkeep/internal/model/card"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/gophkeep/internal/model/user"
-	cardmodel "github.com/arxon31/gophkeep/internal/repository/card/model"
+	cardmodel "github.com/arxon31/gophkeep/internal/repository/card/dto"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 	. "github.com/arxon31/gophkeep/pkg/logger"
 )

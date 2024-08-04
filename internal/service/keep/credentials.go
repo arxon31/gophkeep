@@ -7,7 +7,7 @@ import (
 	"github.com/arxon31/gophkeep/internal/model/credentials"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/gophkeep/internal/model/user"
-	credsmodel "github.com/arxon31/gophkeep/internal/repository/credentials/model"
+	credsmodel "github.com/arxon31/gophkeep/internal/repository/credentials/dto"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 	. "github.com/arxon31/gophkeep/pkg/logger"
 )

@@ -30,7 +30,7 @@ func (ss *syncService) SyncAttachment(ctx context.Context, req *meta.Meta) (*att
 		return nil, ErrValidation
 	}
 
-	attachDB := converter.RequestFromService(user.User(u), *req)
+	attachDB := converter.FromService(user.User(u), *req)
 
 	attach, err := ss.attachments.GetAttachment(ctx, attachDB)
 	if err != nil {
@@ -38,5 +38,5 @@ func (ss *syncService) SyncAttachment(ctx context.Context, req *meta.Meta) (*att
 		return nil, ErrSomethingWentWrong
 	}
 
-	return converter.AttachmentToService(attach), nil
+	return converter.ToService(attach), nil
 }

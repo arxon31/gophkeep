@@ -1,11 +1,11 @@
 package converter
 
 import (
+	"github.com/arxon31/gophkeep/internal/model"
 	"github.com/arxon31/yapr-proto/pkg/gophkeep"
 
 	"github.com/arxon31/gophkeep/internal/model/card"
 	"github.com/arxon31/gophkeep/internal/model/meta"
-	"github.com/arxon31/gophkeep/internal/model/types"
 )
 
 func CardToService(c *gophkeep.SaveCardRequest) (*card.Card, meta.Meta) {
@@ -13,7 +13,7 @@ func CardToService(c *gophkeep.SaveCardRequest) (*card.Card, meta.Meta) {
 		Owner:  c.GetOwner(),
 		Number: c.GetNumber(),
 		CVV:    c.GetCvv(),
-		Type:   types.CARD,
+		Type:   model.CARD,
 	}, meta.Meta(c.Meta.GetMeta())
 }
 

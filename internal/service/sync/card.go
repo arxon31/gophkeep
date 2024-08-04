@@ -31,7 +31,7 @@ func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (resp *card
 		return nil, ErrValidation
 	}
 
-	cardDB := converter.RequestFromService(user.User(u), *req)
+	cardDB := converter.FromService(user.User(u), *req)
 
 	cardFromDB, err := ss.card.GetCard(ctx, cardDB)
 	if err != nil {
@@ -39,7 +39,7 @@ func (ss *syncService) SyncCard(ctx context.Context, req *meta.Meta) (resp *card
 		return nil, ErrSomethingWentWrong
 	}
 
-	hashedCard := converter.CardToService(cardFromDB)
+	hashedCard := converter.ToService(cardFromDB)
 
 	cvvString, err := ss.unhasher.Unhash(hashedCard.CVVHash, hashedCard.CVVSalt)
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 	"github.com/arxon31/gophkeep/internal/model/attachment"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/gophkeep/internal/model/user"
-	attachmodel "github.com/arxon31/gophkeep/internal/repository/attachment/model"
+	attachmodel "github.com/arxon31/gophkeep/internal/repository/attachment/dto"
 	"github.com/arxon31/gophkeep/pkg/ctxfuncs"
 	. "github.com/arxon31/gophkeep/pkg/logger"
 )

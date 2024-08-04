@@ -19,12 +19,12 @@ type S3 struct {
 }
 
 func NewConfig() (*Config, error) {
-	var cfg *Config
+	var cfg Config
 
 	err := cleanenv.ReadEnv(&cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	return cfg, nil
+	return &cfg, nil
 }

@@ -1,4 +1,4 @@
-package types
+package model
 
 const (
 	CREDENTIALS = 1

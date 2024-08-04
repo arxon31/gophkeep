@@ -3,6 +3,7 @@ github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
 github.com/arxon31/yapr-proto v1.0.2 h1:Tamnp267rsHxboXTRhxAX4xsJ2uT5YCmXAc0NS8HBeU=
 github.com/arxon31/yapr-proto v1.0.2/go.mod h1:zH7qmySZzLPOKXOxSjhutLEw1aFirXo4V8eq0SUoCJE=
+github.com/arxon31/yapr-proto v1.0.3 h1:HgiE83siRyUX3rJwluSnxNp7/FN7sfqLeRNjM+Hw/wA=
 github.com/arxon31/yapr-proto v1.0.3/go.mod h1:zH7qmySZzLPOKXOxSjhutLEw1aFirXo4V8eq0SUoCJE=
 github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I=
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
