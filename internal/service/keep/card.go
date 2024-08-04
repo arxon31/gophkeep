@@ -16,32 +16,37 @@ import (
 func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta meta.Meta) error {
 	err := card.Validate()
 	if err != nil {
-		Logger.Error("attach validation", slog.String("error", err.Error()))
+		Logger.Error("card validation", slog.String("error", err.Error()))
 		return ErrValidation
 	}
 
 	err = cardMeta.Validate()
 	if err != nil {
+		Logger.Error("card meta validation", slog.String("error", err.Error()))
 		return ErrValidation
 	}
 
 	u, err := ctxfuncs.GetUserFromContext(ctx)
 	if err != nil {
+		Logger.Error("extracting user from context", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
 	err = user.User(u).Validate()
 	if err != nil {
+		Logger.Error("user validation", slog.String("error", err.Error()))
 		return ErrValidation
 	}
 
 	numberHash, numberSalt, err := ks.hasher.Hash([]byte(card.Number))
 	if err != nil {
+		Logger.Error("card number hashing", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
 	cvvHash, cvvSalt, err := ks.hasher.Hash([]byte(fmt.Sprintf("%d", card.CVV)))
 	if err != nil {
+		Logger.Error("card cvv hashing", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
@@ -57,6 +62,7 @@ func (ks *keepService) KeepCard(ctx context.Context, card *card.Card, cardMeta m
 
 	err = ks.card.SaveCard(ctx, dbCard)
 	if err != nil {
+		Logger.Error("card saving", slog.String("error", err.Error()))
 		return ErrSomethingWentWrong
 	}
 
