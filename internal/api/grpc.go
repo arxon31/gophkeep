@@ -7,6 +7,8 @@ import (
 	"github.com/arxon31/gophkeep/internal/model/credentials"
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/yapr-proto/pkg/gophkeep"
+	"google.golang.org/grpc"
+	"net"
 )
 
 //go:generate moq -out keep_moq_test.go . keepService
@@ -32,6 +34,8 @@ type sessionService interface {
 
 const chunkSize = 1024
 
+const serverPort = ":8080"
+
 type server struct {
 	gophkeep.UnimplementedGophKeepServer
 
@@ -46,4 +50,22 @@ func NewServer(keep keepService, sync syncService, session sessionService) *serv
 		sync:    sync,
 		session: session,
 	}
+}
+
+func (s *server) Run(ctx context.Context) error {
+	srv := grpc.NewServer()
+
+	gophkeep.RegisterGophKeepServer(srv, s)
+
+	listener, err := net.Listen("tcp", serverPort)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		<-ctx.Done()
+		srv.GracefulStop()
+	}()
+
+	return srv.Serve(listener)
 }
