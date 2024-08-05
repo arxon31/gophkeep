@@ -47,10 +47,10 @@ func (s *server) SaveCredentials(ctx context.Context, credentials *gophkeep.Save
 	return &gophkeep.SaveStatus{Success: success}, nil
 }
 
-func (s *server) SaveAttachment(ctx context.Context, attach *gophkeep.SaveFileRequest) (*gophkeep.SaveFileResponse, error) {
+func (s *server) SaveAttachment(ctx context.Context, attach *gophkeep.SaveAttachmentRequest) (*gophkeep.SaveAttachmentResponse, error) {
 	sessionUUID := s.session.Create(fileInfo{name: attach.GetName(), meta: attach.Meta.GetMeta()})
 
-	return &gophkeep.SaveFileResponse{SessionHash: []byte(sessionUUID)}, nil
+	return &gophkeep.SaveAttachmentResponse{SessionHash: []byte(sessionUUID)}, nil
 
 }
 
@@ -59,7 +59,6 @@ func (s *server) StartSaveFileStream(srv grpc.ClientStreamingServer[gophkeep.Chu
 	if err != nil {
 		errMsg := ErrSessionNotFound.Error()
 		_ = srv.SendAndClose(&gophkeep.SaveStatus{Success: failure, Error: &errMsg})
-
 	}
 
 	iInfo, ok := s.session.Info(sessionUUID)

@@ -9,18 +9,21 @@ import (
 	"github.com/arxon31/yapr-proto/pkg/gophkeep"
 )
 
+//go:generate moq -out keep_moq_test.go . keepService
 type keepService interface {
 	KeepAttachment(ctx context.Context, attach *attachment.Attachment, attachMeta meta.Meta) error
 	KeepCard(ctx context.Context, card *card.Card, cardMeta meta.Meta) error
 	KeepCredentials(ctx context.Context, creds *credentials.Credentials, credsMeta meta.Meta) error
 }
 
+//go:generate moq -out sync_moq_test.go . syncService
 type syncService interface {
 	SyncAttachment(ctx context.Context, req *meta.Meta) (*attachment.Attachment, error)
 	SyncCard(ctx context.Context, req *meta.Meta) (resp *card.Card, err error)
 	SyncCredentials(ctx context.Context, req *meta.Meta) (resp *credentials.Credentials, err error)
 }
 
+//go:generate moq -out session_moq_test.go . sessionService
 type sessionService interface {
 	Create(info any) (sessionID string)
 	Info(sessionID string) (any, bool)
