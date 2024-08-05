@@ -29,4 +29,4 @@ format:
 	goimports -local "github.com/arxon31/gophkeep" -w `pwd`
 
 run:
-	docker-compose -f ./deployments/docker-compose-dev.yml up -d --build
+	docker compose -f ./deployments/docker-compose.dev.yml up -d --build

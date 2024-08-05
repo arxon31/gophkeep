@@ -8,6 +8,7 @@ import (
 	"github.com/arxon31/gophkeep/internal/model/meta"
 	"github.com/arxon31/yapr-proto/pkg/gophkeep"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"net"
 )
 
@@ -56,6 +57,8 @@ func (s *server) Run(ctx context.Context) error {
 	srv := grpc.NewServer()
 
 	gophkeep.RegisterGophKeepServer(srv, s)
+
+	reflection.Register(srv)
 
 	listener, err := net.Listen("tcp", serverPort)
 	if err != nil {

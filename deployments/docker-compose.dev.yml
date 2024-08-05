@@ -1,0 +1,46 @@
+services:
+
+  gophkeep:
+    container_name: gophkeep
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DB_NAME=gophkeep
+      - S3_URI=minio:9000
+      - S3_USER=minioadmin
+      - S3_PASSWORD=minioadmin
+      - CRYPTO_KEY=mysecretcryptoke
+      - JWT_KEY=mysecretjwtkey
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+      - minio
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ../mongo_data:/data/db
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "38087:38087"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - ../minio_data:/data
+    command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:38087 /data
+
+
+networks:
+  gophkeeper:
+    name: gophkeeper-net
