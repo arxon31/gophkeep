@@ -1,0 +1,7 @@
+.idea
+.vscode
+coverage.out
+*_moq_test.go
+postgres
+mongo_data
+minio_data
